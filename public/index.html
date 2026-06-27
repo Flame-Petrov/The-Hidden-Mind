@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Hidden Mind — A Field Guide to the Mechanisms That Run You</title>
+<meta name="description" content="Ten thinking traps that quietly shape how you judge, decide, remember, and feel. A deep, plainly-written field guide to the mind." />
+
+<!-- Open Graph -->
+<meta property="og:title" content="The Hidden Mind — A Field Guide to the Mechanisms That Run You" />
+<meta property="og:description" content="Ten thinking traps that quietly shape how you judge, decide, remember, and feel." />
+<meta property="og:type" content="website" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+  /* ============================================================
+     THE HIDDEN MIND — single-page sales site
+     Palette : ink / gold / bone
+     Display : Fraunces (high-contrast serif, used with restraint)
+     Body    : Inter
+     Utility : JetBrains Mono (eyebrows, labels, data)
+     Signature: a faint "mechanism" that surfaces from the dark
+     ============================================================ */
+
+  :root {
+    --ink:        #0c1019;   /* near-black, blue-cast      */
+    --ink-2:      #131a28;   /* raised panel               */
+    --ink-3:      #1b2436;   /* hairline / border          */
+    --bone:       #ece7da;   /* warm off-white text        */
+    --bone-dim:   #9aa0ad;   /* muted text                 */
+    --gold:       #c9a24b;   /* the single accent          */
+    --gold-soft:  #e4c986;
+    --max:        1080px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--ink);
+    color: var(--bone);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--gold); color: var(--ink); }
+
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
+  .wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500;
+  }
+
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 400;
+               line-height: 1.08; letter-spacing: -0.01em; }
+
+  /* ---------- ambient mechanism background ---------- */
+  .field {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(60% 40% at 50% -5%, rgba(201,162,75,0.10), transparent 70%),
+      radial-gradient(45% 35% at 85% 20%, rgba(201,162,75,0.05), transparent 70%);
+  }
+  canvas#mech { position: fixed; inset: 0; z-index: 0; opacity: 0.55;
+                pointer-events: none; }
+
+  main, header, footer { position: relative; z-index: 1; }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 26px 28px; max-width: var(--max); margin: 0 auto;
+  }
+  .mark { font-family: 'Fraunces', serif; font-size: 19px; letter-spacing: 0.02em; }
+  .mark b { color: var(--gold); font-weight: 500; }
+  .topbar .buy-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--ink-3); padding: 9px 16px; border-radius: 2px;
+    transition: border-color .3s, color .3s;
+  }
+  .topbar .buy-link:hover { border-color: var(--gold); color: var(--gold-soft); }
+
+  /* ---------- hero ---------- */
+  .hero { min-height: 100vh; display: flex; align-items: center;
+          padding: 130px 0 90px; }
+  .hero-inner { max-width: 820px; }
+  .hero .eyebrow { opacity: 0; animation: rise .9s .1s forwards; }
+  .hero h1 {
+    font-size: clamp(2.7rem, 7vw, 5.4rem); font-weight: 300;
+    margin: 22px 0 0; letter-spacing: -0.02em;
+  }
+  .hero h1 .em { font-style: italic; color: var(--gold-soft); font-weight: 400; }
+  .hero h1 .line { display: block; opacity: 0; animation: rise 1s forwards; }
+  .hero h1 .line:nth-child(1) { animation-delay: .18s; }
+  .hero h1 .line:nth-child(2) { animation-delay: .30s; }
+  .hero h1 .line:nth-child(3) { animation-delay: .42s; }
+  .hero .lede {
+    font-size: clamp(1.05rem, 1.9vw, 1.32rem); color: var(--bone-dim);
+    max-width: 560px; margin: 34px 0 0; line-height: 1.65;
+    opacity: 0; animation: rise 1s .6s forwards;
+  }
+  .hero .cta-row { margin-top: 44px; display: flex; gap: 18px; align-items: center;
+                   flex-wrap: wrap; opacity: 0; animation: rise 1s .78s forwards; }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    padding: 16px 30px; border-radius: 2px; border: 1px solid transparent;
+    transition: transform .25s, box-shadow .3s, background .3s, color .3s;
+    display: inline-block;
+  }
+  .btn-gold { background: var(--gold); color: var(--ink); font-weight: 500;
+              box-shadow: 0 0 0 rgba(201,162,75,0); }
+  .btn-gold:hover { transform: translateY(-2px);
+                    box-shadow: 0 14px 40px -12px rgba(201,162,75,0.55); }
+  .btn-ghost { border-color: var(--ink-3); color: var(--bone); }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold-soft); }
+  .price-note { font-family: 'JetBrains Mono', monospace; font-size: 12px;
+                color: var(--bone-dim); letter-spacing: 0.05em; }
+  .price-note s { color: #59606e; }
+
+  /* ---------- section frame ---------- */
+  section { padding: 96px 0; }
+  .sec-head { max-width: 640px; margin-bottom: 56px; }
+  .sec-head h2 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 300; margin-top: 16px; }
+  .sec-head p { color: var(--bone-dim); margin-top: 18px; font-size: 1.08rem; }
+  .divider { height: 1px; background: var(--ink-3); max-width: var(--max);
+             margin: 0 auto; }
+
+  /* ---------- the problem (quiet, essayistic) ---------- */
+  .premise { background: var(--ink-2); }
+  .premise .wrap { max-width: 880px; text-align: center; }
+  .premise blockquote {
+    font-family: 'Fraunces', serif; font-size: clamp(1.6rem, 3.4vw, 2.5rem);
+    font-weight: 300; line-height: 1.32; font-style: italic; color: var(--bone);
+  }
+  .premise blockquote .gold { color: var(--gold-soft); font-style: normal; }
+
+  /* ---------- the ten (index list) ---------- */
+  .ten .grid { display: grid; grid-template-columns: repeat(2, 1fr);
+               gap: 0 56px; }
+  .mech-item {
+    border-bottom: 1px solid var(--ink-3);
+    opacity: 0; transform: translateY(16px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .mech-item.in { opacity: 1; transform: none; }
+  .mech-btn {
+    width: 100%; background: none; border: none; cursor: pointer; color: var(--bone);
+    display: flex; align-items: baseline; gap: 18px; text-align: left;
+    padding: 22px 0; font-family: inherit;
+    transition: color .25s;
+  }
+  .mech-btn:hover { color: var(--gold-soft); }
+  .mech-btn .no { font-family: 'JetBrains Mono', monospace; font-size: 13px;
+                  color: var(--gold); min-width: 26px; }
+  .mech-title { flex: 1; }
+  .mech-title h3 { font-size: 1.18rem; font-weight: 500; letter-spacing: 0;
+                   color: inherit; transition: color .25s; }
+  .mech-ico { font-family: 'JetBrains Mono', monospace; color: var(--gold);
+              font-size: 1.25rem; line-height: 1; transition: transform .3s;
+              flex: none; }
+  .mech-item.open .mech-ico { transform: rotate(45deg); }
+  .mech-sum { max-height: 0; overflow: hidden; transition: max-height .4s ease; }
+  .mech-sum > div { padding: 0 0 24px 44px; color: var(--bone-dim);
+                    font-size: 0.96rem; line-height: 1.6; max-width: 90%; }
+
+  /* ---------- inside / what you get ---------- */
+  .inside { background: var(--ink-2); }
+  .inside .cols { display: grid; grid-template-columns: 1.1fr 1fr; gap: 70px;
+                  align-items: center; }
+  .inside-copy h2 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 300;
+                    margin-top: 16px; }
+  .inside-copy p { color: var(--bone-dim); margin-top: 18px; font-size: 1.08rem;
+                   max-width: 420px; }
+
+  /* mock book object */
+  .book {
+    position: relative; max-width: 360px; width: 100%; margin: 0 auto;
+    aspect-ratio: 3 / 4.1; border-radius: 4px;
+    background:
+      linear-gradient(150deg, #16203a 0%, #1f2c52 55%, #2d3d72 100%);
+    box-shadow: 0 40px 90px -30px rgba(0,0,0,0.8),
+                inset 0 0 0 1px rgba(201,162,75,0.18);
+    padding: 38px 30px; display: flex; flex-direction: column;
+    justify-content: space-between; overflow: hidden;
+  }
+  .book::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 9px;
+    background: linear-gradient(var(--gold-soft), var(--gold));
+    opacity: .85;
+  }
+  .book .b-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px;
+                 letter-spacing: 0.3em; text-transform: uppercase;
+                 color: #9fb0d8; }
+  .book .b-title { font-family: 'Fraunces', serif; font-size: 2.1rem;
+                   font-weight: 300; color: #fff; line-height: 1.05; margin-top: 10px; }
+  .book .b-rule { width: 46px; height: 3px; background: var(--gold); margin: 16px 0; }
+  .book .b-sub { font-size: 0.92rem; color: #c2cbe4; max-width: 80%; }
+  .book .b-foot { font-family: 'JetBrains Mono', monospace; font-size: 10px;
+                  letter-spacing: 0.18em; color: #8a99c0; text-transform: uppercase; }
+
+  /* ---------- sample / proof ---------- */
+  .sample .card {
+    background: var(--ink-2); border: 1px solid var(--ink-3); border-radius: 6px;
+    padding: 40px 44px; max-width: 720px;
+  }
+  .sample .in-short { background: rgba(201,162,75,0.10);
+    border-left: 3px solid var(--gold); padding: 16px 20px; border-radius: 3px;
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 1.25rem;
+    color: var(--bone); line-height: 1.4; }
+  .sample .lbl { font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold);
+    margin: 26px 0 8px; }
+  .sample .card p.t { color: var(--bone-dim); }
+
+  /* ---------- price / offer ---------- */
+  .offer { text-align: center; }
+  .offer .panel {
+    max-width: 560px; margin: 0 auto; background: var(--ink-2);
+    border: 1px solid var(--ink-3); border-radius: 8px; padding: 56px 44px;
+    position: relative;
+  }
+  .offer .panel::before {
+    content: ""; position: absolute; inset: 0; border-radius: 8px; padding: 1px;
+    background: linear-gradient(160deg, rgba(201,162,75,0.5), transparent 40%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+  }
+  .offer .price { font-family: 'Fraunces', serif; font-size: 4rem; font-weight: 300;
+                  color: #fff; line-height: 1; margin: 8px 0; }
+  .offer .price small { font-size: 1.6rem; color: var(--bone-dim); }
+  .offer .price small:first-child { vertical-align: super; font-size: 1.3rem;
+                                    margin-right: 2px; }
+  .offer .was { font-family: 'JetBrains Mono', monospace; color: var(--bone-dim);
+                font-size: 13px; }
+  .offer .was s { color: #59606e; }
+  .offer ul { list-style: none; margin: 28px 0; text-align: left;
+              display: inline-block; }
+  .offer li { padding: 7px 0 7px 28px; position: relative; color: var(--bone);
+              font-size: 0.98rem; }
+  .offer li::before { content: "—"; position: absolute; left: 0; color: var(--gold); }
+  .offer .guarantee { font-size: 0.85rem; color: var(--bone-dim); margin-top: 18px;
+                      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+
+  /* ---------- faq ---------- */
+  .faq .q { border-bottom: 1px solid var(--ink-3); }
+  .faq .q button {
+    width: 100%; text-align: left; background: none; border: none; color: var(--bone);
+    font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 400;
+    padding: 24px 40px 24px 0; cursor: pointer; position: relative;
+  }
+  .faq .q button::after { content: "+"; position: absolute; right: 4px; top: 22px;
+    color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 1.3rem;
+    transition: transform .3s; }
+  .faq .q.open button::after { transform: rotate(45deg); }
+  .faq .a { max-height: 0; overflow: hidden; transition: max-height .4s ease;
+            color: var(--bone-dim); }
+  .faq .a div { padding: 0 0 26px; max-width: 700px; }
+
+  /* ---------- footer ---------- */
+  footer { padding: 70px 0 50px; border-top: 1px solid var(--ink-3); }
+  footer .wrap { display: flex; justify-content: space-between; align-items: center;
+                 flex-wrap: wrap; gap: 20px; }
+  footer .mark { font-size: 17px; }
+  footer .fnote { font-family: 'JetBrains Mono', monospace; font-size: 11px;
+                  color: var(--bone-dim); letter-spacing: 0.05em; }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(20px); }
+                    to   { opacity: 1; transform: none; } }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 860px) {
+    .premise .wrap, .inside .cols, .ten .grid { grid-template-columns: 1fr; gap: 40px; }
+    .book { position: relative; top: 0; max-width: 320px; margin: 0 auto; }
+    section { padding: 72px 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto; }
+    .mech-item { opacity: 1; transform: none; }
+    canvas#mech { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="field"></div>
+<canvas id="mech"></canvas>
+
+<div class="topbar wrap">
+  <div class="mark">The Hidden <b>Mind</b></div>
+  <a class="buy-link" href="#offer">Get the guide</a>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div class="eyebrow">A Field Guide to the Mind · 13 Pages · Instant PDF</div>
+      <h1>
+        <span class="line">You don't decide</span>
+        <span class="line">as much as you</span>
+        <span class="line"><span class="em">think you do.</span></span>
+      </h1>
+      <p class="lede">A plainly-written guide to the ten hidden mechanisms that run you most.</p>
+      <div class="cta-row">
+        <a href="#offer" class="btn btn-gold">Read the mind &nbsp;→</a>
+        <a href="#sample" class="btn btn-ghost">See a sample</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- PREMISE -->
+  <section class="premise">
+    <div class="wrap">
+      <blockquote>You believe you weigh the evidence, then decide. Mostly, you <span class="gold">decide first</span> — then assemble the evidence.</blockquote>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- THE TEN -->
+  <section class="ten">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">The Mechanisms</div>
+        <h2>Ten quiet forces, named and disarmed.</h2>
+      </div>
+      <div class="grid" id="tenGrid">
+        <div class="mech-item"><button class="mech-btn"><span class="no">01</span><span class="mech-title"><h3>The Dunning–Kruger Effect</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>When you're bad at something, you often can't tell that you're bad at it — the skill you'd need to judge your work is the same skill you're missing. So beginners feel certain, while real experts hedge.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">02</span><span class="mech-title"><h3>Hindsight Bias</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>Once you know how something turned out, your memory quietly rewrites itself so the outcome feels like it was obvious all along — making you a harsh judge of the past and overconfident about the future.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">03</span><span class="mech-title"><h3>The Base Rate Fallacy</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>A vivid, specific case grabs your attention while the dull background number — how common the thing actually is — gets ignored, even when that number is what matters most.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">04</span><span class="mech-title"><h3>Hedonic Adaptation</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>Good things thrill you, then fade into your new normal as you drift back to baseline. The same mechanism also helps you recover from bad events faster than you'd expect.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">05</span><span class="mech-title"><h3>Negativity Bias</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>Bad experiences hit harder and linger longer than good ones of the same size — a survival instinct that now mostly makes you replay criticism and overlook the good.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">06</span><span class="mech-title"><h3>The Endowment Effect</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>Once you own something, you value it more — just because it's yours. Losing it feels worse than gaining the same thing felt good, so you cling to what you'd never buy again today.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">07</span><span class="mech-title"><h3>The Availability Heuristic</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>If examples come to mind easily, you assume the thing is common — so dramatic, well-reported events feel far more likely than quieter risks that are actually more frequent.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">08</span><span class="mech-title"><h3>The Peak–End Rule</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>You judge an experience by its most intense moment and how it ended — not its average. Two moments end up standing in for the whole thing, and length barely registers.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">09</span><span class="mech-title"><h3>Parkinson's Law</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>Work expands to fill the time you give it. Extra time invites overthinking and delay, so a tighter deadline often produces the same result, sooner.</div></div></div>
+        <div class="mech-item"><button class="mech-btn"><span class="no">10</span><span class="mech-title"><h3>The Zeigarnik Effect</h3></span><span class="mech-ico">+</span></button><div class="mech-sum"><div>Unfinished tasks stay stuck in your mind and keep nagging, while finished ones get released. Just starting a task creates a pull to complete it.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- INSIDE -->
+  <section class="inside">
+    <div class="wrap cols">
+      <div class="inside-copy">
+        <div class="eyebrow">What's Inside</div>
+        <h2>One idea, one page.</h2>
+        <p>Ten mechanisms. Plain language, a real example, and one practical move for each. Built to read once and keep for years.</p>
+      </div>
+      <div class="book">
+        <div>
+          <div class="b-tag">A Field Guide to the Mind</div>
+          <div class="b-title">Psychology<br>Summary</div>
+          <div class="b-rule"></div>
+          <div class="b-sub">Ten thinking traps that shape how you judge, decide, remember, and feel.</div>
+        </div>
+        <div class="b-foot">10 Concepts · 13 Pages · PDF</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SAMPLE -->
+  <section class="sample" id="sample">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">A Page From Inside</div>
+        <h2>The voice of the whole book.</h2>
+      </div>
+      <div class="card">
+        <div class="in-short">When you're bad at something, you often can't tell that you're bad at it — so you feel more confident than you should.</div>
+        <div class="lbl">Why it happens</div>
+        <p class="t">The skill you need to <em>do</em> something well is the same skill you need to <em>judge</em> whether you're doing it well. So if you lack the skill, you also lack the ability to see that you lack it. You're missing the very tool that would reveal the problem.</p>
+        <div class="lbl">What to do</div>
+        <p class="t">Be suspicious of your earliest confidence. If something feels simple, you may just be too new to see what's hard about it. And when an expert sounds uncertain, take them more seriously, not less.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- OFFER -->
+  <section class="offer" id="offer">
+    <div class="wrap">
+      <div class="sec-head" style="margin:0 auto 48px; text-align:center">
+        <div class="eyebrow">The Guide</div>
+        <h2>Own the map to your own mind.</h2>
+      </div>
+      <div class="panel">
+        <div class="was">Introductory price · <s>€12</s></div>
+        <div class="price"><small>€</small>4<small>.99</small></div>
+        <ul>
+          <li>All 10 mechanisms, one page each</li>
+          <li>13-page PDF, instant download</li>
+          <li>Yours to keep forever</li>
+        </ul>
+        <a href="https://flamepetrov.gumroad.com/l/bxnshm" class="btn btn-gold" id="buyBtn" style="width:100%; max-width:340px;">Get instant access &nbsp;→</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="eyebrow">Before You Ask</div>
+        <h2>The honest answers.</h2>
+      </div>
+      <div class="q"><button>What format is it?</button><div class="a"><div>A designed PDF, delivered instantly. Reads cleanly on phone, tablet, laptop, or printed. No app, no account.</div></div></div>
+      <div class="q"><button>Who is it for?</button><div class="a"><div>Anyone who makes decisions, remembers things, and feels — especially if you want to be harder to fool, including by yourself.</div></div></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="mark">The Hidden <b>Mind</b></div>
+    <div class="fnote">© <span id="yr"></span> · A Field Guide to the Mind · All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* Mechanisms: click a row to reveal its brief summary */
+  document.querySelectorAll('.mech-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var item = btn.parentElement;
+      var sum = item.querySelector('.mech-sum');
+      var open = item.classList.toggle('open');
+      sum.style.maxHeight = open ? sum.scrollHeight + 'px' : 0;
+    });
+  });
+
+  /* FAQ accordion */
+  document.querySelectorAll('.faq .q button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var q = b.parentElement;
+      var a = q.querySelector('.a');
+      var open = q.classList.toggle('open');
+      a.style.maxHeight = open ? a.scrollHeight + 'px' : 0;
+    });
+  });
+
+  /* Buy button links directly to the Gumroad checkout page (see href in markup). */
+
+  /* Scroll reveal for the ten */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en, i) {
+      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.mech-item').forEach(function (el, i) {
+    el.style.transitionDelay = (i % 2) * 0.06 + 0.04 * Math.floor(i / 2) + 's';
+    io.observe(el);
+  });
+
+  /* Signature: faint "mechanism" — drifting nodes that connect when near,
+     a quiet visual of hidden machinery. Disabled for reduced-motion via CSS. */
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var c = document.getElementById('mech'), x = c.getContext('2d');
+    var w, h, pts, DPR = Math.min(window.devicePixelRatio || 1, 2);
+    function size() {
+      w = c.width = innerWidth * DPR; h = c.height = innerHeight * DPR;
+      c.style.width = innerWidth + 'px'; c.style.height = innerHeight + 'px';
+      var n = Math.min(46, Math.floor(innerWidth / 32));
+      pts = Array.from({ length: n }, function () {
+        return { x: Math.random() * w, y: Math.random() * h,
+                 vx: (Math.random() - 0.5) * 0.18 * DPR,
+                 vy: (Math.random() - 0.5) * 0.18 * DPR };
+      });
+    }
+    function tick() {
+      x.clearRect(0, 0, w, h);
+      for (var i = 0; i < pts.length; i++) {
+        var p = pts[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+        for (var j = i + 1; j < pts.length; j++) {
+          var q = pts[j], dx = p.x - q.x, dy = p.y - q.y;
+          var d = Math.sqrt(dx * dx + dy * dy), max = 150 * DPR;
+          if (d < max) {
+            x.strokeStyle = 'rgba(201,162,75,' + (0.16 * (1 - d / max)) + ')';
+            x.lineWidth = DPR;
+            x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke();
+          }
+        }
+        x.fillStyle = 'rgba(201,162,75,0.5)';
+        x.beginPath(); x.arc(p.x, p.y, 1.3 * DPR, 0, 6.283); x.fill();
+      }
+      requestAnimationFrame(tick);
+    }
+    size(); tick(); addEventListener('resize', size);
+  })();
+</script>
+</body>
+</html>
