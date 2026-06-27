@@ -1,0 +1,13 @@
+# render.yaml — optional one-click blueprint for Render.
+# If you use this, Render reads it automatically and you can skip the
+# manual build/start settings in the dashboard.
+services:
+  - type: web
+    name: the-hidden-mind
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 18

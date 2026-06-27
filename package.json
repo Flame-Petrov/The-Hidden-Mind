@@ -1,0 +1,15 @@
+{
+  "name": "the-hidden-mind",
+  "version": "1.0.0",
+  "description": "Single-page sales site for the ebook 'The Hidden Mind — A Field Guide to the Mind'.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
